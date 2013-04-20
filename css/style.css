@@ -1,0 +1,133 @@
+/* GLOBAL STYLE RULES */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.specific-font {
+  font-family: Helvetica, sans-serif;
+}
+
+.header-40 {
+  height: calc(100% - 41px);
+  height: -moz-calc(100% - 41px);
+  height: -webkit-calc(100% - 41px);
+}
+
+/* HEADER */
+#header {
+  line-height: 40px;
+  font-size: 22px;
+  text-shadow: -1px 1px 2px #1D2A38;
+  height: 40px;
+  background: #3E5A78;
+  border-bottom: 1px solid #000;
+  color: #fff;
+}
+
+#header #title {
+  padding: 0 5px;
+}
+
+.btn {
+  width: 40px;
+  float: right;
+  cursor: pointer;
+  display: inline-block;
+  height: 40px;
+  text-align: center;
+}
+
+.btn:hover {
+  background: #52779E;
+}
+
+.btn i {
+  margin-top: 8px;
+  display: inline-block !important;
+}
+
+/* LEFT PANEL */
+#left-panel {
+  float: left;
+  width: calc(50% - 1px);
+  width: -moz-calc(50% - 1px);
+  width: -webkit-calc(50% - 1px);
+  border-right: 1px solid #000;
+}
+
+#timeline {
+  height: 39px;
+  background: #999;
+  border-bottom: 1px solid #333;
+}
+
+#timeline #input-container {
+  float: left;
+  width: calc(100% - 41px);
+  width: -moz-calc(100% - 41px);
+  width: -webkit-calc(100% - 41px);
+  border-top: 1px solid #ccc;
+}
+
+#timeline #input-container input {
+  cursor: pointer;
+}
+
+#timeline .btn {
+  height: 38px;
+  color: #fff;
+  text-shadow: -1px 1px 2px #1D2A38;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #333
+}
+
+#timeline .btn:hover {
+  background: #888;
+}
+
+#timeline input[type="range"] {
+  margin: 0;
+  width: 100%;
+}
+
+#timeline.playing .btn.play {
+  display: none;
+}
+
+#timeline.playing .btn.pause {
+  display: inline-block;
+}
+
+#timeline .btn.pause {
+  display: none;
+}
+
+#visualization {
+  background: #000;
+  height: calc(100% - 41px);
+  height: -moz-calc(100% - 41px);
+  height: -webkit-calc(100% - 41px);
+}
+
+/* RIGHT PANEL */
+#right-panel {
+  float: left;
+  width: 50%;
+}
+
+#content {
+  /* todo */
+}
+
+#article {
+  display: none;
+}
+
+#left-panel[data-article] #article {
+  display: block;
+}
+
+#left-panel[data-article] #rolodex {
+  display: none;
+}

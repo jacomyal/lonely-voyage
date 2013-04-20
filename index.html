@@ -1,15 +1,49 @@
 <html>
   <head>
-    <title>Space Apps Challenge</title>
+    <title>The Lonely Voyage</title>
 
-    <!-- STYLE: -->
-    <link rel="stylesheet" href="css/style.css">
+    <!-- STYLE AND FONTS: -->
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/font-awesome.css" rel="stylesheet" type="text/css">
+    <!-- <link href="http://fonts.googleapis.com/css?family=Inder" rel="stylesheet" type="text/css"> -->
   </head>
   <body>
+    <div id="header" class="specific-font">
+      <span id="title">The Lonely Voyage</span>
+      <div class="btn">
+        <i class="icon-info-sign"></i>
+      </div>
+      <div class="btn">
+        <i class="icon-github-alt"></i>
+      </div>
+    </div>
+    <div id="left-panel" class="header-40">
+      <div id="timeline" class="header playing">
+        <div id="input-container"></div>
+        <div class="btn play">
+          <i class="icon-play"></i>
+        </div>
+        <div class="btn pause">
+          <i class="icon-pause"></i>
+        </div>
+      </div>
+      <div id="visualization">
+        <canvas></canvas>
+        <div id="captions"></div>
+      </div>
+    </div>
+    <div id="right-panel" class="header-40">
+      <div id="content" class="header-40">
+        <div id="rolodex"></div>
+        <div id="article"></div>
+      </div>
+    </div>
     
     <!-- SCRIPTS: -->
     <script src="js/jquery.min.js"></script>
     <script src="js/domino.min.js"></script>
+    <script src="js/modules.js"></script>
+    <script src="js/tools.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>
