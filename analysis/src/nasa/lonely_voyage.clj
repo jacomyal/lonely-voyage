@@ -1,11 +1,10 @@
 (ns nasa.lonely-voyage
-  (:use
-   [incanter.core :as incanter]
-   [incanter.stats :as stats]
-   [incanter.charts :as charts])
-  (:require
-   [clojure.java.io :as io]
-   [clojure.string :as str])
+  (:use [incanter.core :as incanter]
+        [incanter.stats :as stats]
+        [incanter.charts :as charts])
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
+            [cheshire.core :refer :all])
   (:gen-class))
 
 (defn readcsv
@@ -60,23 +59,13 @@
    (+ (java.lang.Math/pow x 2)
       (java.lang.Math/pow y 2))))
 
-;; (defn clean-data
-;;   [val]
-;;   (if (< val 0.0000000000001)
-;;     0
-;;     val))
-
-(defn clean-data
-  [val]
-  val)
-
 (defn vels
   [p1 p2]
   (let [[t1 x1 y1 z1] p1
         [t2 x2 y2 z2] p2
         dt (- t2 t1)
-        dx (clean-data (- x2 x1))
-        dy (clean-data (- y2 y1))
+        dx (- x2 x1)
+        dy (- y2 y1)
         velx (/ dx dt)
         vely (/ dy dt)]
     [velx vely]))
@@ -96,8 +85,8 @@
         t2 (first p2)
         t1 (first p1)
         dt  (- t2 t1)
-        dvx (clean-data (- vx2 vx1))
-        dvy (clean-data (- vy2 vy1))
+        dvx (- vx2 vx1)
+        dvy (- vy2 vy1)
         accx (/ dvx dt)
         accy (/ dvy dt)]
     [accx accy]))
@@ -117,9 +106,9 @@
         velx (velx p1 p2)
         vely (vely p1 p2)
 
-        num (clean-data
-             (- (* velx accy)
-                (* vely accx)))
+        num (* 1000000
+               (- (* velx accy 1000)
+                  (* vely accx 1000)))
 
         den (java.lang.Math/pow
              (+ (java.lang.Math/pow velx 2)
@@ -161,6 +150,46 @@
       (- 0 max)
       c)))
 
+(defn smoothing
+  [data]
+  (loop [toprocess data
+         out []]
+    (if-let [p0 (nth toprocess 0 nil)]
+      (if-let [p1 (nth toprocess 1 nil)]
+        (if-let [p2 (nth toprocess 2 nil)]
+          (let [sum (+ p0 p1 p2)
+                n (/ sum 3)]
+            (recur
+             (rest toprocess)
+             (conj out n)))
+          out)
+        out)
+      out))
+  )
+
+
+(defn smoothing2
+  [data]
+  (loop [toprocess data
+         out []]
+    (if-let [p0 (nth toprocess 0 nil)]
+      (if-let [p1 (nth toprocess 1 nil)]
+        (if-let [p2 (nth toprocess 2 nil)]
+          (if-let [p3 (nth toprocess 3 nil)]
+            (if-let [p4 (nth toprocess 4 nil)]
+
+              (let [sum (+ p0 p1 p2 p3 p4)
+                    n (/ sum 5)]
+                (recur
+                 (rest toprocess)
+                 (conj out n)))
+
+              out)
+            out)
+          out)
+        out)
+      out)))
+
 (defn view-data
   [tak data]
   (let [data (sort-by first data)
@@ -174,20 +203,26 @@
         ;;   vy (map #(nth % 6) data)
         v (map #(nth % 7) data)
         c (map #(nth % 8) data)
-     ;;   c (map #(maxout % 0.1) c)
+        k (map #(maxout % 0.01) c)
+        k (smoothing2
+           (smoothing2
+            (smoothing2
+             (smoothing2
+              (smoothing2 k)))))
         ]
 
-    (view (scatter-plot x y :legend "XY plot"))
-
-    (view (xy-plot t r :legend "R plot"))
-
-    (view (xy-plot t a :legend "alpha plot"))
-
-  ;;  (view (xy-plot t vx :legend "velocity x"))
-  ;;  (view (xy-plot t vy :legend "velocity y"))
-
-    (view (xy-plot t v :legend "velocity"))
+    ;;  (view (scatter-plot x y :legend "XY plot"))
+    ;;  (view (xy-plot t r :legend "R plot"))
+    ;;  (view (xy-plot t a :legend "alpha plot"))
+    ;;  (view (xy-plot t vx :legend "velocity x"))
+    ;;  (view (xy-plot t vy :legend "velocity y"))
+    ;;  (view (xy-plot t v :legend "velocity"))
 
     (view (xy-plot t c :legend "curvature plot"))
-
+    (view (xy-plot t k :legend "curvature plot2"))
     ))
+
+(defn dump-data
+  [filename data]
+  (generate-stream data
+                   (clojure.java.io/writer filename)))
