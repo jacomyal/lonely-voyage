@@ -4,6 +4,26 @@
   window.lv = window.lv || {};
   lv.modules = lv.modules || {};
 
+  lv.modules.player = function() {
+    domino.module.call(this);
+    var _self = this,
+        _isPlaying = false,
+        _interval;
+
+    function startLoop() {
+      _interval = window.setInterval(function() {
+        _self.dispatchEvent('goNextFrame');
+      }, 40);
+    }
+
+    this.triggers.events.isPlayingUpdated = function(control) {
+      if (_isPlaying = control.get('isPlaying'))
+        startLoop();
+      else
+        window.clearInterval(_interval);
+    };
+  };
+
   lv.modules.playButton = function(html) {
     domino.module.call(this);
     var _self = this,

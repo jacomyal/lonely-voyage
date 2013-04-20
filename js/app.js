@@ -112,6 +112,7 @@
             this.log('HACK: Index path');
 
             var i,
+                j,
                 l,
                 path = this.get('path'),
                 currentMonth = 0,
@@ -129,8 +130,8 @@
               if (!nextPoint)
                 break;
 
-              nextPointDate = lv.tools.newDate(nextPoint[0]);
-              nextMonth = lv.tools.getMonthDiff(dMin, nextPointDate);
+              nextPointDate = lv.tools.getNewDate(nextPoint[0]);
+              nextMonth = lv.tools.getMonthsDiff(dMin, nextPointDate);
 
               if (currentMonth === nextMonth && !pathIndex[currentMonth])
                 pathIndex[currentMonth] = point;
@@ -170,6 +171,14 @@
 
             this.nearestEvents = events.slice(i, i + eventsCount);
           }
+        },
+        {
+          triggers: 'goNextFrame',
+          method: function() {
+            this.date = lv.tools.getNewDate(this.get('date', {
+              days: 1
+            }));
+          }
         }
       ],
       services: [
@@ -180,6 +189,11 @@
             this.historicEvents = data;
             this.date = dMin;
           }
+        },
+        {
+          id: 'path',
+          url: 'data/path.json',
+          setter: 'path'
         },
         {
           id: 'config',
@@ -195,6 +209,10 @@
     });
 
     // Instanciate modules:
+    lv.control.addModule(
+      lv.modules.player
+    );
+
     lv.control.addModule(
       lv.modules.playButton,
       [
@@ -229,7 +247,7 @@
     lv.control.dispatchEvent(
       'resize'
     ).request(
-      ['historicEvents', 'config']
+      ['historicEvents', 'config', 'path']
     );
   });
 })();

@@ -1,0 +1,10 @@
+JSON path format:
+  0: time (ms since 1970)
+  1: x (meters)
+  2: y (meters)
+  3: r (meters, distance to the Sun)
+  4: alpha (radians, velocity vector direction)
+  5: vx (meters/s "whatever", velocity on x)
+  6: vy (meters/s "whatever", velocity on y)
+  7: v (meters/s "whatever", velocity)
+  8: c (1/meters, curvature)

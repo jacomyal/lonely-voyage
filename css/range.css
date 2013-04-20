@@ -1,6 +1,6 @@
 /* slider root element */
 .slider {
-    background:#3E5A78;
+    background:#fff;
     height:9px;
     position:relative;
     cursor:pointer;
@@ -9,7 +9,6 @@
     float:left;
     clear:right;
     margin-top:5px;
-    -moz-box-shadow:inset 0 0 8px #000;
 }
 
 /* progress bar (enabled with progress: true) */
@@ -25,7 +24,7 @@
     background:#fff;
     height:12px;
     width:12px;
-    top:-5px;
+    top:-3px;
     position:absolute;
     display:block;
     margin-top:1px;
