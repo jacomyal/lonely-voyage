@@ -120,6 +120,10 @@ body {
   width: 50%;
 }
 
+#content {
+  position: relative;
+}
+
 #content, #rolodex, #article {
   height: 100%;
   width: 100%;
@@ -162,12 +166,30 @@ body {
   display: none;
 }
 
-#content[data-article-id] #article {
+#content[data-article-id] #article,
+#content[data-article-id] .btn.close-article {
   display: block;
 }
 
-#article {
+#article,
+#content .btn.close-article {
   display: none;
+}
+
+#content .btn.close-article {
+  font-size: 17.5px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #c33;
+}
+
+#content .btn.close-article:hover {
+  background: none;
+  color: #d55;
+}
+
+#article {
   overflow: auto;
 }
 

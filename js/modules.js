@@ -56,7 +56,9 @@
     });
 
     function getDate() {
-      return lv.tools.getNewDate(dMin, { m: _input.val() });
+      return lv.tools.getNewDate(dMin, {
+        m: _input.val()
+      });
     };
 
     function setDate(d) {
@@ -107,30 +109,37 @@
 
     // Bind mouse events:
     _html.click(function(e) {
-      var t = $(e.target);
+      var p,
+          t = $(e.target);
 
-      if (t.is('.abstract-title'))
+      if (t.is('.abstract-title')) {
         // No time to code the hack properly, the article
         // will be loaded directly from here:
+        // 
         // _self.dispatchEvent('openArticle', {
         //   id: t.parents('li').attr('data-article-id')
         // });
         
-        openPost(t.parents('li').attr('data-article-id'));
+        openArticle(t.parents('li').attr('data-article-id'));
+      } else if (
+        (t.is('.close-article') && (p = t)) ||
+        (p = t.parents('.close-article')).length
+      ) {
+        closeArticle();
+      }
     });
 
-    function openPost(id) {
+    function openArticle(id) {
       $('#content', _html).attr('data-article-id', id);
       $('#article', _html).empty().load('samples/event.html');
     }
 
-    function closePost() {
+    function closeArticle() {
       $('#article', _html).empty();
+      $('#content', _html).attr('data-article-id', null);
     }
 
-    this.triggers.events.dateUpdated = function() {
-      $('#content', _html).attr('data-article-id', null);
-    };
+    this.triggers.events.dateUpdated = closeArticle;
 
     this.triggers.events.nearestEventsUpdated = function(control) {
       var ul = $('ul', _rolodex).empty();
@@ -160,8 +169,8 @@
         addAbstract(events[i]);
     };
 
-    this.triggers.events.openPost = function(_, event) {
-      openPost(event.data.id);
+    this.triggers.events.openArticle = function(_, event) {
+      openArticle(event.data.id);
     };
   };
 })();
