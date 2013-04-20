@@ -29,8 +29,8 @@
 (defn normalize-line
   [line]
   (let [[t x y z] line]
-    [(read-julian-date t)
-     (* 1000 (parse-double x))
+    [(/ (read-julian-date t) 1000) ;; seconds
+     (* 1000 (parse-double x)) ;; meters
      (* 1000 (parse-double y))
      (* 1000 (parse-double z))]))
 
@@ -106,9 +106,9 @@
         velx (velx p1 p2)
         vely (vely p1 p2)
 
-        num (* 1000000
-               (- (* velx accy 1000)
-                  (* vely accx 1000)))
+        num (* 1000000000
+               (- (* velx accy)
+                  (* vely accx)))
 
         den (java.lang.Math/pow
              (+ (java.lang.Math/pow velx 2)
@@ -211,12 +211,12 @@
               (smoothing2 k)))))
         ]
 
-    ;;  (view (scatter-plot x y :legend "XY plot"))
+    (view (scatter-plot x y :legend "XY plot"))
     ;;  (view (xy-plot t r :legend "R plot"))
-    ;;  (view (xy-plot t a :legend "alpha plot"))
+    (view (xy-plot t a :legend "alpha plot"))
     ;;  (view (xy-plot t vx :legend "velocity x"))
     ;;  (view (xy-plot t vy :legend "velocity y"))
-    ;;  (view (xy-plot t v :legend "velocity"))
+    (view (xy-plot t v :legend "velocity"))
 
     (view (xy-plot t c :legend "curvature plot"))
     (view (xy-plot t k :legend "curvature plot2"))
