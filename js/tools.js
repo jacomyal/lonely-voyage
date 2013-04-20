@@ -70,6 +70,12 @@
   };
 
   lv.tools.prettyDate = function(d) {
+    d = typeof d === 'string' ? lv.tools.parseDate(d) : d;
     return d.getFullYear() + ' ' + _monthsNames[d.getMonth()] + ' ' + d.getDate();
+  };
+
+  lv.tools.numDate = function(d) {
+    d = typeof d === 'string' ? lv.tools.parseDate(d) : d;
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
   };
 })();

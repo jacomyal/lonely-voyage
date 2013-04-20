@@ -3,6 +3,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: Helvetica, sans-serif;
 }
 
 .specific-font {
@@ -27,6 +28,7 @@ body {
 }
 
 #header #title {
+  float: left;
   padding: 0 5px;
 }
 
@@ -118,12 +120,64 @@ body {
   width: 50%;
 }
 
-#content {
-  /* todo */
+#content, #rolodex, #article {
+  height: 100%;
+  width: 100%;
+  float: right;
 }
 
 #article {
   display: none;
+}
+
+#rolodex ul li {
+  width: 95%;
+  height: 25px;
+  list-style: none;
+}
+
+#rolodex ul li i {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  color: #fff;
+}
+
+#rolodex ul li * {
+  vertical-align: middle;
+}
+
+#rolodex ul li .abstract-title:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #111;
+}
+
+#rolodex ul li .abstract-date {
+  float: right;
+}
+
+#content[data-article-id] #rolodex {
+  display: none;
+}
+
+#content[data-article-id] #article {
+  display: block;
+}
+
+#article {
+  display: none;
+  overflow: auto;
+}
+
+#article > * {
+  padding: 10px;
+}
+
+#article > iframe, #article > img {
+  display: block;
+  margin: 0 auto;
 }
 
 #left-panel[data-article] #article {
