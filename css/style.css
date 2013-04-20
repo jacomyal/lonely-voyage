@@ -2,6 +2,7 @@
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
 .specific-font {
@@ -18,7 +19,7 @@ body {
 #header {
   line-height: 40px;
   font-size: 22px;
-  text-shadow: -1px 1px 2px #1D2A38;
+  text-shadow: 0 1px 2px #1D2A38;
   height: 40px;
   background: #3E5A78;
   border-bottom: 1px solid #000;
@@ -57,7 +58,7 @@ body {
 }
 
 #timeline {
-  height: 39px;
+  height: 40px;
   background: #999;
   border-bottom: 1px solid #333;
 }
@@ -75,15 +76,16 @@ body {
 }
 
 #timeline .btn {
-  height: 38px;
+  height: 39px;
   color: #fff;
-  text-shadow: -1px 1px 2px #1D2A38;
+  text-shadow: 0 1px 2px #1D2A38;
   border-top: 1px solid #ccc;
   border-left: 1px solid #333
 }
 
 #timeline .btn:hover {
-  background: #888;
+  height: 39px;
+  background: #aaa;
 }
 
 #timeline input[type="range"] {
