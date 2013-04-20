@@ -79,11 +79,28 @@
           var i = 0,
               l,
               path = this.get('path'),
-              currentMonth = 0;
+              currentMonth = 0,
+              pathIndex = {},
+              point,
+              nextMonth = 0;
 
           for (l = path.length; i < l; i++) {
-            // TODO
+            point = path[i];
+            currentMonth = nextMonth;
+            nextPoint = path[i+1];
+            if (!nextPoint)
+              break;
+            nextPointDate = lv.tools.newDate(nextPoint[0]);
+            nextPointMonth = lv.tools.getMonthDiff(dMin, nextPointDate);
+            nextMonth = nextPointMonth;
+            if (currentMonth === nextPointMonth && !pathIndex[currentMonth])
+              pathIndex[currentMonth] = point;
+            for (j = currentMonth; j < nextPointMonth; j++) {
+              if (!pathIndex[j])
+                pathIndex[j] = point;
+            }
           }
+          this.pathIndex = pathIndex;
         }
       },
       {
