@@ -39,6 +39,13 @@
 
         // Data:
         {
+          id: 'config',
+          dispatch: 'configUpdated',
+          triggers: 'updateConfig',
+          type: 'object',
+          value: {}
+        },
+        {
           id: 'historicEvents',
           dispatch: 'historicEventsUpdated',
           triggers: 'updateHistoricEvents',
@@ -86,7 +93,7 @@
           triggers: 'pathUpdated',
           method: function() {
             this.log('HACK: Index path');
-            
+
             var i = 0,
                 l,
                 path = this.get('path'),
@@ -138,6 +145,11 @@
           id: 'historicEvents',
           url: 'samples/events_random.json',
           setter: 'historicEvents'
+        },
+        {
+          id: 'config',
+          url: 'samples/config.json',
+          setter: 'config'
         }
       ]
     });
@@ -172,6 +184,6 @@
     );
 
     // Bootstrap:
-    lv.control.dispatchEvent('resize').request('historicEvents');
+    lv.control.dispatchEvent('resize').request(['historicEvents', 'config']);
   });
 })();
