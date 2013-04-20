@@ -3,11 +3,11 @@
   window.lv = window.lv || {};
 
   $(document).ready(function() {
-    domino.settings({
-      strict: true,
-      verbose: true,
-      displayTime: true
-    });
+    // domino.settings({
+    //   strict: true,
+    //   verbose: true,
+    //   displayTime: true
+    // });
 
     var dMin = lv.tools.parseDate('1977-09-01'),
         dMax = new Date();
@@ -175,9 +175,9 @@
         {
           triggers: 'goNextFrame',
           method: function() {
-            this.date = lv.tools.getNewDate(this.get('date', {
-              days: 1
-            }));
+            this.date = lv.tools.getNewDate(this.get('date'), {
+              days: 3
+            });
           }
         }
       ],

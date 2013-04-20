@@ -13,7 +13,7 @@
     function startLoop() {
       _interval = window.setInterval(function() {
         _self.dispatchEvent('goNextFrame');
-      }, 40);
+      }, 50);
     }
 
     this.triggers.events.isPlayingUpdated = function(control) {
