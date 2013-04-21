@@ -2,7 +2,6 @@ Lonely Voyage retraces some of the main events that took place on planet Earth w
 
 We travel alongside Voyager through a timeline that covers the fields of Sciences and technology, history, and culture.
 
-
 Team :
 
     Alexis Jacomy interface development (html and javascript)
@@ -15,6 +14,8 @@ Thanks to :
 
 Betty Queffelec, Marion Boucharlat, Jack Higgins, David Fossé.
 
+Demo URL:
+http://jcml.fr/~jacomyal/lv/
 
 JSON path format:
   0: time (ms since 1970)
