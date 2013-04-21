@@ -127,6 +127,9 @@
         (t.is('.caption') && (p = t)) ||
         (p = t.parents('.caption')).length
       ) {
+        _self.dispatchEvent('updateIsPlaying', {
+          isPlaying: false
+        });
         _self.dispatchEvent('clickArticle', {
           id: p.attr('data-article-id')
         });
@@ -251,7 +254,7 @@
         }, null);
         coef = distance / v;
 
-        cap = $('.caption[data-article-id="' + e.i + '"]', _captions)
+        cap = $('.caption[data-article-id="' + e.i + '"]', _captions);
         cap = (cap.length ? cap : $(
           '<div class="caption" ' +
                'style="color:' + cat.color + ';" ' +
@@ -330,7 +333,7 @@
 
     function openArticle(id) {
       $('#content', _html).attr('data-article-id', id);
-      $('#article', _html).empty().load('samples/event.html');
+      $('#article', _html).empty().load('contents/' + id + '.html');
     }
 
     function closeArticle() {
@@ -364,6 +367,10 @@
 
       for (i = 0, l = events.length; i < l; i++)
         addAbstract(events[i], ul);
+
+      var id = events[control.get('lastCrossedEvent')].i;
+      $('li', ul).removeClass('last-crossed');
+      $('li[data-article-id="' + id + '"]', ul).addClass('last-crossed');
     };
 
     this.triggers.events.openArticle = function(_, event) {

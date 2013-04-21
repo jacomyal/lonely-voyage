@@ -33,6 +33,7 @@ body {
 #header #title img {
   float: left;
   padding-right: 10px;
+  padding-left: 5px;
 }
 
 .btn {
@@ -148,12 +149,12 @@ body {
 
 #rolodex, #article {
   float: right;
-  overflow: auto;
   width: 100%;
 }
 
 #article {
   display: none;
+  overflow: auto;
 }
 
 #visualization {
@@ -208,19 +209,24 @@ body {
 #rolodex ul {
   margin: 0;
   padding: 0;
+  overflow: auto;
+  height: calc(100% - 101px);
+  height: -moz-calc(100% - 101px);
+  height: -webkit-calc(100% - 101px);
 }
 
 #rolodex ul li {
   padding: 3px 10px;
   height: 40px;
   list-style: none;
+  padding-top: 5px;
+  padding-top: 5px;
 }
 
-#rolodex ul li:first-child {
-  box-shadow: 0 0 9px #2A557F;
-  border-top: 1px solid #2A557F;
-  border-bottom: 1px solid #2A557F;
-  padding-top: 10px;
+#rolodex ul li.last-crossed {
+  box-shadow: 0 0 10px #2A557F;
+  padding-top: 4px;
+  padding-top: 4px;
 }
 
 #rolodex ul li i {
@@ -265,6 +271,7 @@ body {
   position: relative;
   background: #fff;
   height: 100px;
+  border-bottom: 1px solid #2A557F;
 }
 
 #legend {

@@ -79,6 +79,13 @@
           value: []
         },
         {
+          id: 'lastCrossedEvent',
+          dispatch: 'lastCrossedEventUpdated',
+          triggers: 'updateLastCrossedEvent',
+          type: 'number',
+          value: -1
+        },
+        {
           id: 'nextEvents',
           dispatch: 'nextEventsUpdated',
           triggers: 'updateNextEvents',
@@ -179,6 +186,7 @@
             }
 
             j = i - 1;
+            this.lastCrossedEvent = j;
 
             // Normalize the index:
             i = Math.max(i, closestEventsCount);
@@ -188,6 +196,8 @@
             j = Math.max(j, 0);
             j = Math.min(j, l - nextEventsCount);
             this.nextEvents = events.slice(j, j + nextEventsCount);
+
+            this.lastCrossedEvent = this.lastCrossedEvent - j;
 
             // this.speed = Math.floor(Math.min(
             //   Math.max(
@@ -331,5 +341,14 @@
     ).request(
       ['historicEvents', 'config', 'path']
     );
+
+    // Last minute missing stuff:
+    $('.btn.github').click(function() {
+      window.open('https://github.com/jacomyal/lonely-voyage', '_blank');
+    });
+
+    $('.btn.info').click(function() {
+      window.open('https://github.com/jacomyal/lonely-voyage', '_blank');
+    });
   });
 })();
