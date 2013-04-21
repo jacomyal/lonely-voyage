@@ -107,7 +107,59 @@
         _ctx = _canvas.getContext('2d');
 
     function draw(control) {
-      // TODO
+      _canvas.width = _canvas.width;
+
+      var i,
+          l,
+          t = 50,
+          cat,
+          cats = control.get('categories'),
+          conf = control.get('categoriesOrder'),
+          p = control.get('closestPosition'),
+          vx = p[5],
+          vy = p[6],
+          v = p[7],
+          r = 1 / p[8] / 100000000,
+          cx = vy / v * r,
+          cy = -vx / v * r,
+          coef = Math.sqrt(
+            Math.pow(_canvas.width, 2),
+            Math.pow(_canvas.height, 2)
+          ) / v;
+
+      // Radius correction:
+      r = Math.sqrt(cx * cx + cy * cy);
+
+      for (i = 0, l = conf.length; i < l; i++) {
+        cat = cats[conf[i]];
+        _ctx.strokeStyle = cat.color;
+        _ctx.lineWidth = t - 1;
+
+        if (r > 50000) {
+          _ctx.beginPath();
+          _ctx.moveTo(
+            _canvas.width / 2 - vx * coef - vy / v * t * (i - 2),
+            _canvas.height / 2 - vy * coef + vx / v * t * (i - 2)
+          );
+          _ctx.lineTo(
+            _canvas.width / 2 + vx * coef - vy / v * t * (i - 2),
+            _canvas.height / 2 + vy * coef + vx / v * t * (i - 2)
+          );
+          _ctx.closePath();
+          _ctx.stroke();
+        } else {
+          _ctx.beginPath();
+          _ctx.arc(
+            cx + _canvas.width / 2,
+            cy + _canvas.height / 2,
+            r - 2 * t + i * t,
+            0,
+            2 * Math.PI
+          );
+          _ctx.closePath();
+          _ctx.stroke();
+        }
+      }
     }
 
     function resize() {
@@ -115,7 +167,8 @@
       _canvas.height = _html.height();
     }
 
-    this.triggers.events.dateUpdated = draw;
+    this.triggers.events.resize = resize;
+    this.triggers.events.closestPositionUpdated = draw;
   };
 
   lv.modules.rightPanel = function(html) {
@@ -164,10 +217,7 @@
     this.triggers.events.nearestEventsUpdated = function(control) {
       var ul = $('ul', _rolodex).empty();
 
-      _config = ((control.get('config') || {}).categories || []).reduce(function(r, o) {
-        r[o.id] = o;
-        return r;
-      }, {});
+      _config = control.get('categories');
 
       var i,
           l,

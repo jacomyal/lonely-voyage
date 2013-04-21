@@ -31,9 +31,9 @@
 
   lv.tools.parseDate = function(string) {
     var d;
-
-    if (typeof d === 'number')
-      return new Date(d);
+    
+    if (typeof string === 'number')
+      return new Date(string);
 
     string = string.toString();
 
@@ -60,7 +60,7 @@
   lv.tools.getNewDate = function(d, o) {
     d = (typeof d === 'string' || typeof d === 'number') ? lv.tools.parseDate(d) : d;
     o = o || {};
-    
+
     var res = new Date(d.getTime());
 
     // Add years:

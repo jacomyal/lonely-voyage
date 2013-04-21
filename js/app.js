@@ -13,7 +13,7 @@
         dMax = new Date();
 
     lv.control = new domino({
-      name: 'the-lonely-voyage',
+      name: 'lv',
       properties: [
         // Context:
         {
@@ -22,6 +22,16 @@
           triggers: 'updateDate',
           type: 'date',
           value: dMin
+        },
+        {
+          id: 'dateMin',
+          type: 'date',
+          value: dMin
+        },
+        {
+          id: 'dateMax',
+          type: 'date',
+          value: dMax
         },
         {
           id: 'speed',
@@ -40,11 +50,18 @@
 
         // Data:
         {
-          id: 'config',
-          dispatch: 'configUpdated',
-          triggers: 'updateConfig',
+          id: 'categories',
+          dispatch: 'categoriesUpdated',
+          triggers: 'updateCategories',
           type: 'object',
           value: {}
+        },
+        {
+          id: 'categoriesOrder',
+          dispatch: 'categoriesOrderUpdated',
+          triggers: 'updateCategoriesOrder',
+          type: 'array',
+          value: []
         },
         {
           id: 'historicEvents',
@@ -54,18 +71,11 @@
           value: []
         },
         {
-          id: 'nearestEvents',
-          dispatch: 'nearestEventsUpdated',
-          triggers: 'updateNearestEvents',
+          id: 'closestEvents',
+          dispatch: 'closestEventsUpdated',
+          triggers: 'updateClosestEvents',
           type: 'array',
           value: []
-        },
-        {
-          id: 'contents',
-          dispatch: 'contentsUpdated',
-          triggers: 'updateContents',
-          type: 'object',
-          value: {}
         },
         {
           id: 'path',
@@ -75,34 +85,18 @@
           value: []
         },
         {
-          id: 'direction', // angle only
-          dispatch: 'directionUpdated',
-          triggers: 'updateDirection',
-          type: 'number',
-          value: Math.PI
+          id: 'closestPosition',
+          dispatch: 'closestPositionUpdated',
+          triggers: 'updateClosestPosition',
+          type: 'array',
+          value: []
         },
-        {
-          id: 'curvature', // radius only
-          dispatch: 'curvatureUpdated',
-          triggers: 'updateCurvature',
-          type: 'number',
-          value: 10e6
-        },
-
-        // Cache:
         {
           id: 'pathIndex',
           dispatch: 'pathIndexUpdated',
           triggers: 'updatePathIndex',
-          type: 'object',
-          value: {}
-        },
-        {
-          id: 'eventsCursor',
-          dispatch: 'eventsCursorUpdated',
-          triggers: 'updateEventsCursor',
-          type: 'number',
-          value: 0
+          type: 'array',
+          value: []
         }
       ],
       hacks: [
@@ -116,11 +110,12 @@
                 l,
                 path = this.get('path'),
                 currentMonth = 0,
-                pathIndex = {},
+                pathIndex = [],
                 point,
                 nextMonth = 0,
                 nextPointDate,
-                nextPoint;
+                nextPoint,
+                closest;
 
             for (i = 0, l = path.length; i < l; i++) {
               point = path[i];
@@ -134,11 +129,11 @@
               nextMonth = lv.tools.getMonthsDiff(dMin, nextPointDate);
 
               if (currentMonth === nextMonth && !pathIndex[currentMonth])
-                pathIndex[currentMonth] = point;
+                pathIndex[currentMonth] = i;
 
               for (j = currentMonth; j < nextMonth; j++)
                 if (!pathIndex[j])
-                  pathIndex[j] = point;
+                  pathIndex[j] = i;
             }
 
             this.pathIndex = pathIndex;
@@ -147,21 +142,26 @@
         {
           triggers: 'dateUpdated',
           method: function() {
-            this.log('HACK: Compute speed');
+            this.log('HACK: Cache some values');
 
             var i,
                 l,
                 e,
                 events = this.get('historicEvents'),
-                date = lv.tools.numDate(this.get('date')),
+                date = this.get('date'),
+                path = this.get('path'),
+                pathIndex = this.get('pathIndex'),
+                dateTime = date.getTime(),
+                dateNum = lv.tools.numDate(date),
+                m = lv.tools.getMonthsDiff(this.get('dateMin'), date),
                 eventsCount = 10,
-                nearest = [];
+                closest = [];
 
             // Find the first event after the date:
             for (i = 0, l = events.length; i < l; i++) {
               e = events[i];
 
-              if (e.d > date)
+              if (e.d > dateNum)
                 break;
             }
 
@@ -169,7 +169,15 @@
             i = Math.max(i, 0);
             i = Math.min(i, l - eventsCount);
 
-            this.nearestEvents = events.slice(i, i + eventsCount);
+            this.closestEvents = events.slice(i, i + eventsCount);
+
+            // Find the closest position:
+            for (i = pathIndex[m], l = path.length; i < l; i++) {
+              if (path[i][0] > dateTime) {
+                this.closestPosition = path[i];
+                break;
+              }
+            }
           }
         },
         {
@@ -198,7 +206,17 @@
         {
           id: 'config',
           url: 'samples/config.json',
-          setter: 'config'
+          success: function(data) {
+            this.categories = data.categories.reduce(function(r, o) {
+              r[o.id] = o;
+              return r;
+            }, {});
+            this.categoriesOrder = data.categories.filter(function(o) {
+              return !o.parent;
+            }).map(function(o) {
+              return o.id;
+            });
+          }
         }
       ]
     });
