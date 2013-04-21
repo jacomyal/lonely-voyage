@@ -11,20 +11,18 @@ body {
 }
 
 .header-40 {
-  height: calc(100% - 41px);
-  height: -moz-calc(100% - 41px);
-  height: -webkit-calc(100% - 41px);
+  height: calc(100% - 40px);
+  height: -moz-calc(100% - 40px);
+  height: -webkit-calc(100% - 40px);
 }
 
 /* HEADER */
 #header {
   line-height: 40px;
-  font-size: 22px;
-  text-shadow: 0 1px 4px #000;
+  font-size: 25px;
   height: 40px;
-  background: #3E5A78;
-  border-bottom: 1px solid #000;
-  color: #fff;
+  background: #fff;
+  color: #2A557F;
 }
 
 #header #title {
@@ -42,7 +40,7 @@ body {
 }
 
 .btn:hover {
-  background: #52779E;
+  background: #f0f0f0;
 }
 
 .btn i {
@@ -56,21 +54,23 @@ body {
   width: calc(50% - 1px);
   width: -moz-calc(50% - 1px);
   width: -webkit-calc(50% - 1px);
-  border-right: 1px solid #000;
 }
 
 #timeline {
   height: 40px;
-  background: #999;
-  border-bottom: 1px solid #333;
+  background: #2A557F;
+}
+
+#timeline i {
+  padding-top: 3px;
 }
 
 #timeline #input-container {
+  padding-top: 8px; 
   float: left;
-  width: calc(100% - 41px);
-  width: -moz-calc(100% - 41px);
-  width: -webkit-calc(100% - 41px);
-  border-top: 1px solid #ccc;
+  width: calc(100% - 40px);
+  width: -moz-calc(100% - 40px);
+  width: -webkit-calc(100% - 40px);
 }
 
 #timeline #input-container input {
@@ -78,21 +78,23 @@ body {
 }
 
 #timeline .btn {
-  height: 39px;
+  height: 40px;
   color: #fff;
-  text-shadow: 0 1px 4px #000;
-  border-top: 1px solid #ccc;
-  border-left: 1px solid #333
 }
 
 #timeline .btn:hover {
-  height: 39px;
-  background: #aaa;
+  height: 40px;
+  background: #3F80BF;
 }
 
 #timeline input[type="range"] {
   margin: 0;
   width: 100%;
+}
+
+#timeline.playing .btn.play i,
+#timeline.playing .btn.pause i {
+  margin-top: 10px;
 }
 
 #timeline.playing .btn.play {
@@ -109,9 +111,9 @@ body {
 
 #visualization {
   background: #000;
-  height: calc(100% - 41px);
-  height: -moz-calc(100% - 41px);
-  height: -webkit-calc(100% - 41px);
+  height: calc(100% - 40px);
+  height: -moz-calc(100% - 40px);
+  height: -webkit-calc(100% - 40px);
 }
 
 /* RIGHT PANEL */
@@ -120,15 +122,29 @@ body {
   width: 50%;
 }
 
+.date {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background: #2A557F;
+  color: #fff;
+}
+
 #content {
   position: relative;
 }
 
-#content, #rolodex, #article {
+#content {
   height: 100%;
   width: 100%;
   float: right;
   overflow: auto;
+}
+
+#rolodex, #article {
+  float: right;
+  overflow: auto;
+  width: 100%;
 }
 
 #article {
@@ -229,7 +245,7 @@ body {
 #content .btn.close-article {
   font-size: 17.5px;
   position: absolute;
-  top: 10px;
+  top: 50px;
   right: 10px;
   color: #c33;
 }

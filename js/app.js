@@ -3,12 +3,12 @@
   window.lv = window.lv || {};
 
   $(document).ready(function() {
-    // DEBUG:
-    domino.settings({
-      strict: true,
-      verbose: true,
-      displayTime: true
-    });
+    // // DEBUG:
+    // domino.settings({
+    //   strict: true,
+    //   verbose: true,
+    //   displayTime: true
+    // });
 
     var dMin = lv.tools.parseDate('1977-09-01'),
         dMax = new Date();
@@ -279,6 +279,13 @@
         $('#input-container'),
         dMin,
         dMax
+      ]
+    );
+
+    lv.control.addModule(
+      lv.modules.date,
+      [
+        $('.date')
       ]
     );
 

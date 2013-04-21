@@ -105,7 +105,10 @@
         _canvas = $('canvas', _html)[0],
         _ctx = _canvas.getContext('2d'),
         _captions = $('#captions', _html),
-        _t = 50;
+        _pattern,
+        _patterndx = 0,
+        _patterndy = 0,
+        _t = 55;
 
     // Bind mouse events:
     _captions.click(function(e) {
@@ -122,10 +125,16 @@
       }
     });
 
-    function drawHighway(control) {
-      _ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-      _ctx.fillRect(0, 0, _canvas.width, _canvas.height);
+    // Load BG pattern:
+    (function() {
+      var imageObj = new Image();
+      imageObj.onload = function() {
+        _pattern = _ctx.createPattern(imageObj, 'repeat');
+      };
+      imageObj.src = 'img/sky.png';
+    })();
 
+    function drawHighway(control) {
       var i,
           l,
           cat,
@@ -143,13 +152,26 @@
             Math.pow(_canvas.height, 2)
           ) / v;
 
+      if (_pattern) {
+        _patterndx = ((_patterndx + vx / v) % 400 + 400) % 400;
+        _patterndy = ((_patterndy + vy / v) % 400 + 400) % 400;
+        
+        _ctx.translate(-_patterndx, -_patterndy);
+        _ctx.globalAlpha = 0.3;
+        _ctx.rect(0, 0, _canvas.width + 400, _canvas.height + 400);
+        _ctx.fillStyle = _pattern;
+        _ctx.fill();
+        _ctx.globalAlpha = 1;
+        _ctx.translate(_patterndx, _patterndy);
+      }
+
       // Radius correction:
       r = Math.sqrt(cx * cx + cy * cy);
 
       for (i = 0, l = conf.length; i < l; i++) {
         cat = cats[conf[i]];
         _ctx.strokeStyle = cat.color;
-        _ctx.lineWidth = _t - 2;
+        _ctx.lineWidth = _t - 4;
 
         if (r > -1) {
           _ctx.beginPath();
@@ -239,15 +261,24 @@
       });
     }
 
-    function resize() {
+    this.triggers.events.resize = function(control) {
       _canvas.width = _html.width();
       _canvas.height = _html.height();
-    }
 
-    this.triggers.events.resize = resize;
+      drawHighway(control);
+      drawEvents(control);
+    };
+
     this.triggers.events.closestPositionUpdated = function(control) {
       drawHighway(control);
       drawEvents(control);
+    };
+  };
+
+  lv.modules.date = function(html) {
+    domino.module.call(this);
+    this.triggers.events.dateUpdated = function(control) {
+      html.text(lv.tools.prettyDate(control.get('date')));
     };
   };
 
@@ -309,7 +340,6 @@
 
     this.triggers.events.nextEventsUpdated = function(control) {
       var ul = $('ul', _rolodex).empty();
-      $('div.date', _rolodex).text(lv.tools.prettyDate(control.get('date')));
 
       _config = control.get('categories');
 
