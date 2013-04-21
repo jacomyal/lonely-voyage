@@ -117,39 +117,6 @@
     (/ num den)))
 
 
-
-(defn process-data
-  [data]
-  (loop [toprocess data
-         out []]
-    (if-let [p0 (nth toprocess 0 nil)]
-      (if-let [p1 (nth toprocess 1 nil)]
-        (if-let [p2 (nth toprocess 2 nil)]
-          (let [[t1 x1 y1 z1] p1
-                [t2 x2 y2 z2] p2
-                dx (- x2 x1)
-                dy (- y2 y1)
-                r (norm x1 y1)
-                alpha (atan (/ dx dy))
-                velx (velx p1 p2)
-                vely (vely p1 p2)
-                vel (norm velx vely)
-                curv (curvature p0 p1 p2)]
-            (recur
-             (rest toprocess)
-             (conj out [t1 x1 y1 r alpha velx vely vel curv])))
-          out)
-        out)
-      out)))
-
-(defn maxout
-  [c max]
-  (if (> c max)
-    max
-    (if (< c (- 0 max))
-      (- 0 max)
-      c)))
-
 (defn smoothing
   [data]
   (loop [toprocess data
@@ -164,9 +131,7 @@
              (conj out n)))
           out)
         out)
-      out))
-  )
-
+      out)))
 
 (defn smoothing2
   [data]
@@ -177,18 +142,91 @@
         (if-let [p2 (nth toprocess 2 nil)]
           (if-let [p3 (nth toprocess 3 nil)]
             (if-let [p4 (nth toprocess 4 nil)]
-
               (let [sum (+ p0 p1 p2 p3 p4)
                     n (/ sum 5)]
                 (recur
                  (rest toprocess)
                  (conj out n)))
-
               out)
             out)
           out)
         out)
       out)))
+
+(defn maxout
+  [c max]
+  (if (> c max)
+    max
+    (if (< c (- 0 max))
+      (- 0 max)
+      c)))
+
+(defn process-data
+  [data]
+  (loop [toprocess data
+         out []]
+    (if-let [p0 (nth toprocess 0 nil)]
+      (if-let [p1 (nth toprocess 1 nil)]
+        (if-let [p2 (nth toprocess 2 nil)]
+          (let [[t1 x1 y1 z1] p1
+                [t2 x2 y2 z2] p2
+                dx (- x2 x1)
+                dy (- y2 y1)
+                ;; r (norm x1 y1)
+                alpha (atan (/ dx dy))
+                velx (velx p1 p2)
+                vely (vely p1 p2)
+                ;; vel (norm velx vely)
+                curv (curvature p0 p1 p2)
+                ]
+            (recur
+             (rest toprocess)
+             (conj out [t1 x1 y1
+                        ;; alpha
+                        velx vely curv
+                        ])))
+          out)
+        out)
+      out)))
+
+(defn floor
+  [x]
+  (java.lang.Math/floor x))
+
+(defn dump-data
+  [filename data]
+  (let [data (sort-by first data)
+        t (map #(nth % 0) data)
+        t (map #(* 1000 %) t) ;; ms epoch
+
+        x (map #(nth % 1) data)
+        x (map #(/ % 1000) x) ;; km
+        y (map #(nth % 2) data)
+        y (map #(/ % 1000) y) ;; km
+
+        ;; r (map #(nth % 3) data)
+        ;; a (map #(nth % 4) data)
+
+        vx (map #(nth % 3) data)
+        vy (map #(nth % 4) data)
+        ;; v (map #(nth % 7) data)
+        c (map #(nth % 5) data)
+        curv (map #(maxout % 0.01) c)
+        curv (smoothing2
+              (smoothing2
+               (smoothing2
+                (smoothing2
+                 (smoothing2 curv)))))
+        alld (map (fn [tt xx yy vvx vvy ccurv]
+                    [tt
+                     (floor xx)
+                     (floor yy)
+                     (floor vvx)
+                     (floor vvy)
+                     ccurv])
+                  t x y vx vy curv)]
+    (generate-stream alld
+                     (clojure.java.io/writer filename))))
 
 (defn view-data
   [tak data]
@@ -199,30 +237,17 @@
         y (map #(nth % 2) data)
         r (map #(nth % 3) data)
         a (map #(nth % 4) data)
-        ;;   vx (map #(nth % 5) data)
-        ;;   vy (map #(nth % 6) data)
+        vx (map #(nth % 5) data)
+        vy (map #(nth % 6) data)
         v (map #(nth % 7) data)
         c (map #(nth % 8) data)
-        k (map #(maxout % 0.01) c)
-        k (smoothing2
-           (smoothing2
-            (smoothing2
-             (smoothing2
-              (smoothing2 k)))))
         ]
 
     (view (scatter-plot x y :legend "XY plot"))
-    ;;  (view (xy-plot t r :legend "R plot"))
+    (view (xy-plot t r :legend "R plot"))
     (view (xy-plot t a :legend "alpha plot"))
-    ;;  (view (xy-plot t vx :legend "velocity x"))
-    ;;  (view (xy-plot t vy :legend "velocity y"))
+    (view (xy-plot t vx :legend "velocity x"))
+    (view (xy-plot t vy :legend "velocity y"))
     (view (xy-plot t v :legend "velocity"))
-
     (view (xy-plot t c :legend "curvature plot"))
-    (view (xy-plot t k :legend "curvature plot2"))
     ))
-
-(defn dump-data
-  [filename data]
-  (generate-stream data
-                   (clojure.java.io/writer filename)))
