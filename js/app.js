@@ -210,9 +210,14 @@
         {
           triggers: 'goNextFrame',
           method: function() {
-            this.date = lv.tools.getNewDate(this.get('date'), {
+            var d = lv.tools.getNewDate(this.get('date'), {
               days: this.get('speed')
             });
+
+            if (d.getTime() < this.get('dateMax').getTime())
+              this.date = d;
+            else
+              this.isPlaying = false;
           }
         },
         {
