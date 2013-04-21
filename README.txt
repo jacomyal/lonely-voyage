@@ -1,3 +1,21 @@
+Lonely Voyage retraces some of the main events that took place on planet Earth while Voyager was taking its long journey to the infinity of space.
+
+We travel alongside Voyager through a timeline that covers the fields of Sciences and technology, history, and culture.
+
+
+Team :
+
+    Alexis Jacomy interface development (html and javascript)
+    Philippe Guillebert trajectory data processing (clojure)
+    Josquin Debaz data crunching (python), graphics (the Gimp)
+    Nils Grünwald data crunching (clojure)
+    Nolwenn Guellec editorial contents
+
+Thanks to :
+
+Betty Queffelec, Marion Boucharlat, Jack Higgins
+
+
 JSON path format:
   0: time (ms since 1970)
   1: x (meters)
