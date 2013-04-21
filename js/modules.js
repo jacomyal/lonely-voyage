@@ -92,6 +92,7 @@
 
     function drawCaption() {
       // TODO
+      // no time...
     }
 
     this.html = _html;
@@ -237,20 +238,20 @@
       for (i = 0; i < l; i++) {
         e = events[i];
         ids[e.i] = 1;
-        cat = cats[e.c];
+        cat = cats[e.c || e.s];
 
         distance = -lv.tools.getDaysDiff(d, lv.tools.parseDate(e.d)) * 2;
         parent = cat.parent || cat.id;
         index = order.reduce(function(r, s, i) {
           return s === parent ? i : r;
         }, null);
-
         coef = distance / v;
 
         cap = $('.caption[data-article-id="' + e.i + '"]', _captions)
         cap = (cap.length ? cap : $(
           '<div class="caption" ' +
                'style="color:' + cat.color + ';" ' +
+               'title="' + e.t + ' - ' + lv.tools.prettyDate(e.d) + '" ' +
                'data-article-id="' + e.i + '">' +
             '<i class="' + cat.icon + '" />' +
             '<div class="caption-label">' + e.t + '</div>' +
@@ -332,11 +333,11 @@
     function addAbstract(event, ul) {
       ul.append(
         '<li class="abstract" data-article-id="' + event.i + '">' +
-          '<i class="' + _config[event.c].icon + '" ' +
-             'style="background:' + _config[event.c].color + ';" />' +
+          '<i class="' + _config[event.c || event.s].icon + '" ' +
+             'style="background:' + _config[event.c || event.s].color + ';" />' +
           '<span class="abstract-title">' + event.t + '</span>' +
           '<span class="abstract-date" ' +
-                'style="color:' + _config[event.c].color + ';">' + lv.tools.prettyDate(event.d) + '</span>' +
+                'style="color:' + _config[event.c || event.s].color + ';">' + lv.tools.prettyDate(event.d) + '</span>' +
         '</li>'
       );
     }

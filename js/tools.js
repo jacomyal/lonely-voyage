@@ -88,6 +88,14 @@
 
   lv.tools.numDate = function(d) {
     d = typeof d === 'string' ? lv.tools.parseDate(d) : d;
-    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+
+    var y = d.getFullYear(),
+        m = d.getMonth() + 1,
+        d = d.getDate();
+
+    m = m < 10 ? '0' + m.toString() : m;
+    d = d < 10 ? '0' + d.toString() : d;
+
+    return y + '-' + m + '-' + d;
   };
 })();

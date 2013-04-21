@@ -157,6 +157,7 @@
             this.log('HACK: Cache some values');
 
             var i,
+                j,
                 l,
                 e,
                 events = this.get('historicEvents'),
@@ -173,19 +174,20 @@
             // Find the closest events to the date:
             for (i = 0, l = events.length; i < l; i++) {
               e = events[i];
-
               if (e.d > dateNum)
                 break;
             }
+
+            j = i;
 
             // Normalize the index:
             i = Math.max(i, closestEventsCount);
             i = Math.min(i, l - closestEventsCount);
             this.closestEvents = events.slice(i - closestEventsCount, i + closestEventsCount);
 
-            i = Math.max(i, 0);
-            i = Math.min(i, l - nextEventsCount);
-            this.nextEvents = events.slice(i, i + nextEventsCount);
+            j = Math.max(j, 0);
+            j = Math.min(j, l - nextEventsCount);
+            this.nextEvents = events.slice(j, j + nextEventsCount);
 
             // this.speed = Math.floor(Math.min(
             //   Math.max(
@@ -232,7 +234,7 @@
       services: [
         {
           id: 'historicEvents',
-          url: 'samples/events_random.json',
+          url: 'data/events.json',
           success: function(data) {
             this.historicEvents = data;
             this.date = dMin;
@@ -245,7 +247,7 @@
         },
         {
           id: 'config',
-          url: 'samples/config.json',
+          url: 'data/config.json',
           success: function(data) {
             this.categories = data.categories.reduce(function(r, o) {
               r[o.id] = o;
