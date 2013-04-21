@@ -109,6 +109,7 @@
 
     var _self = this,
         _html = html,
+        _date,
         _canvas = $('canvas', _html)[0],
         _ctx = _canvas.getContext('2d'),
         _captions = $('#captions', _html),
@@ -137,6 +138,9 @@
       var imageObj = new Image();
       imageObj.onload = function() {
         _pattern = _ctx.createPattern(imageObj, 'repeat');
+        _self.dispatchEvent('updateDate', {
+          date: _date
+        });
       };
       imageObj.src = 'img/sky.png';
     })();
@@ -277,6 +281,7 @@
     };
 
     this.triggers.events.closestPositionUpdated = function(control) {
+      _date = control.get('date');
       drawHighway(control);
       drawEvents(control);
     };
@@ -285,7 +290,10 @@
   lv.modules.date = function(html) {
     domino.module.call(this);
     this.triggers.events.dateUpdated = function(control) {
-      html.text(lv.tools.prettyDate(control.get('date')));
+      html.text(
+        'Current date : ' +
+        lv.tools.prettyDate(control.get('date'))
+      );
     };
   };
 

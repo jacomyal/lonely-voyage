@@ -258,6 +258,21 @@
             }).map(function(o) {
               return o.id;
             });
+
+            var cats = this.categories;
+
+            // HARD CODED
+            $('#legend').append(
+              this.categoriesOrder.map(function(id) {
+                var cat = cats[id];
+                return(
+                  '<div class="legend-line">' +
+                    '<div class="square" style="background:' + cat.color + ';" />' +
+                    '<span>' + cat.label + '</span>' +
+                  '</div>'
+                );
+              }).join('')
+            );
           }
         }
       ]

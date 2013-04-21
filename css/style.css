@@ -218,6 +218,9 @@ body {
 
 #rolodex ul li:first-child {
   box-shadow: 0 0 9px #2A557F;
+  border-top: 1px solid #2A557F;
+  border-bottom: 1px solid #2A557F;
+  padding-top: 10px;
 }
 
 #rolodex ul li i {
@@ -258,6 +261,40 @@ body {
   float: right;
 }
 
+#rolodex-header {
+  position: relative;
+  background: #fff;
+  height: 100px;
+}
+
+#legend {
+  position: absolute;
+  padding-right: 20px;
+  border-right: 1px solid #2A557F;
+}
+
+#rolodex-title {
+  position: absolute;
+  height: 100%;
+  left: 180px;
+  text-align: center;
+  padding-top: 30px;
+  color: #2A557F;
+}
+
+#legend .square {
+  margin-right: 5px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+
+#legend .legend-line,
+#legend .legend-line * {
+  line-height: 20px;
+  vertical-align: top;
+}
+
 #content[data-article-id] #rolodex {
   display: none;
 }
@@ -277,7 +314,7 @@ body {
   position: absolute;
   top: 50px;
   right: 10px;
-  color: #c33;
+  color: #2A557F;
 }
 
 #content .btn.close-article:hover {
