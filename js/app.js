@@ -3,11 +3,12 @@
   window.lv = window.lv || {};
 
   $(document).ready(function() {
-    // domino.settings({
-    //   strict: true,
-    //   verbose: true,
-    //   displayTime: true
-    // });
+    // DEBUG:
+    domino.settings({
+      strict: true,
+      verbose: true,
+      displayTime: true
+    });
 
     var dMin = lv.tools.parseDate('1977-09-01'),
         dMax = new Date();
@@ -143,6 +144,11 @@
             }
 
             this.pathIndex = pathIndex;
+
+            // Tweak: Since this hack is triggered just once,
+            // I use it to start the drawing process the first
+            // time:
+            this.date = this.get('date');
           }
         },
         {
