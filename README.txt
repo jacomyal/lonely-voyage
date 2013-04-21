@@ -13,7 +13,7 @@ Team :
 
 Thanks to :
 
-Betty Queffelec, Marion Boucharlat, Jack Higgins
+Betty Queffelec, Marion Boucharlat, Jack Higgins, David Fossé.
 
 
 JSON path format:
