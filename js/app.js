@@ -38,7 +38,7 @@
           dispatch: 'speedUpdated',
           triggers: 'updateSpeed',
           type: 'number',
-          value: 0 // Days per frame
+          value: 3 // Days per frame
         },
         {
           id: 'isPlaying',
@@ -74,6 +74,13 @@
           id: 'closestEvents',
           dispatch: 'closestEventsUpdated',
           triggers: 'updateClosestEvents',
+          type: 'array',
+          value: []
+        },
+        {
+          id: 'nextEvents',
+          dispatch: 'nextEventsUpdated',
+          triggers: 'updateNextEvents',
           type: 'array',
           value: []
         },
@@ -114,8 +121,7 @@
                 point,
                 nextMonth = 0,
                 nextPointDate,
-                nextPoint,
-                closest;
+                nextPoint;
 
             for (i = 0, l = path.length; i < l; i++) {
               point = path[i];
@@ -154,10 +160,11 @@
                 dateTime = date.getTime(),
                 dateNum = lv.tools.numDate(date),
                 m = lv.tools.getMonthsDiff(this.get('dateMin'), date),
-                eventsCount = 10,
+                closestEventsCount = 30,
+                nextEventsCount = 8,
                 closest = [];
 
-            // Find the first event after the date:
+            // Find the closest events to the date:
             for (i = 0, l = events.length; i < l; i++) {
               e = events[i];
 
@@ -166,10 +173,24 @@
             }
 
             // Normalize the index:
-            i = Math.max(i, 0);
-            i = Math.min(i, l - eventsCount);
+            i = Math.max(i, closestEventsCount);
+            i = Math.min(i, l - closestEventsCount);
+            this.closestEvents = events.slice(i - closestEventsCount, i + closestEventsCount);
 
-            this.closestEvents = events.slice(i, i + eventsCount);
+            i = Math.max(i, 0);
+            i = Math.min(i, l - nextEventsCount);
+            this.nextEvents = events.slice(i, i + nextEventsCount);
+
+            // this.speed = Math.floor(Math.min(
+            //   Math.max(
+            //     lv.tools.getDaysDiff(date, lv.tools.parseDate(this.closestEvents[closestEventsCount - 1].d)) / 5,
+            //     1
+            //   ),
+            //   Math.max(
+            //     lv.tools.getDaysDiff(date, lv.tools.parseDate(this.closestEvents[closestEventsCount].d)) / 5,
+            //     1
+            //   )
+            // ));
 
             // Find the closest position:
             for (i = pathIndex[m], l = path.length; i < l; i++) {
@@ -184,7 +205,15 @@
           triggers: 'goNextFrame',
           method: function() {
             this.date = lv.tools.getNewDate(this.get('date'), {
-              days: 3
+              days: this.get('speed')
+            });
+          }
+        },
+        {
+          triggers: 'clickArticle',
+          method: function(e) {
+            this.dispatchEvent('openArticle', {
+              id: e.data.id
             });
           }
         }

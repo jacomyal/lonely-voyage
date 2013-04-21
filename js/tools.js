@@ -57,6 +57,10 @@
     return 12 * (dMax.getFullYear() - dMin.getFullYear()) + dMax.getMonth() - dMin.getMonth();
   };
 
+  lv.tools.getDaysDiff = function(dMin, dMax) {
+    return Math.ceil((dMax.getTime() - dMin.getTime()) / 86400000);
+  };
+
   lv.tools.getNewDate = function(d, o) {
     d = (typeof d === 'string' || typeof d === 'number') ? lv.tools.parseDate(d) : d;
     o = o || {};

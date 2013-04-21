@@ -3,19 +3,19 @@
     {
       "id": "history",
       "label": "history",
-      "color": "#A5DBC6"
+      "color": "#E36435"
     },
     {
       "id": "conflict",
       "label": "conflict",
-      "color": "#A5DBC6",
+      "color": "#E36435",
       "icon": "icon-fighter-jet",
       "parent": "history"
     },
     {
       "id": "politics",
       "label": "politics",
-      "color": "#A5DBC6",
+      "color": "#E36435",
       "icon": "icon-flag",
       "parent": "history"
     },
@@ -23,33 +23,33 @@
     {
       "id": "event",
       "label": "event",
-      "color": "#DFBE79",
+      "color": "#C92CF0",
       "icon": "icon-exclamation-sign"
     },
 
     {
       "id": "culture",
       "label": "culture",
-      "color": "#E6B7B1"
+      "color": "#F0CE2C"
     },
     {
       "id": "movie",
       "label": "movie",
-      "color": "#E6B7B1",
+      "color": "#F0CE2C",
       "icon": "icon-film",
       "parent": "culture"
     },
     {
       "id": "music",
       "label": "music",
-      "color": "#E6B7B1",
+      "color": "#F0CE2C",
       "icon": "icon-music",
       "parent": "culture"
     },
     {
       "id": "sport",
       "label": "sport",
-      "color": "#E6B7B1",
+      "color": "#F0CE2C",
       "icon": "icon-trophy",
       "parent": "culture"
     },
@@ -57,19 +57,19 @@
     {
       "id": "technology",
       "label": "technology",
-      "color": "#C9C8E3"
+      "color": "#FA466C"
     },
     {
       "id": "techno",
       "label": "techno",
-      "color": "#C9C8E3",
+      "color": "#FA466C",
       "icon": "icon-desktop",
       "parent": "technology"
     },
     {
       "id": "science",
       "label": "science",
-      "color": "#C9C8E3",
+      "color": "#FA466C",
       "icon": "icon-cogs",
       "parent": "technology"
     },
@@ -77,19 +77,19 @@
     {
       "id": "space",
       "label": "space",
-      "color": "#C2DF95"
+      "color": "#FAA82E"
     },
     {
       "id": "space in culture",
       "label": "space in culture",
-      "color": "#C2DF95",
+      "color": "#FAA82E",
       "icon": "icon-globe",
       "parent": "space"
     },
     {
       "id": "space conquest",
       "label": "space conquest",
-      "color": "#C2DF95",
+      "color": "#FAA82E",
       "icon": "icon-star",
       "parent": "space"
     }
