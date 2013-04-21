@@ -64,8 +64,7 @@
         _html = html.append(_input);
 
     // Range input polyfill:
-    _input.rangeinput();
-    _input = $('input', _html);
+    _input = _input.rangeinput();
 
     // Observe modifications:
     _input.change(function() {
@@ -82,7 +81,7 @@
     };
 
     function setDate(d) {
-      _input.val(lv.tools.getMonthsDiff(dMin, d));
+      ___hackedRange.setValue(lv.tools.getMonthsDiff(dMin, d));
     };
 
     function drawCaption() {

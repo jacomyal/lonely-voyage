@@ -324,6 +324,11 @@
       }
       
     });
+
+    // F*ck that shit, there's no way to access the previously
+    // declared methods directly. No more time to spend, time
+    // hack:
+    window.___hackedRange = self;
     
     // callbacks
     $.each("onSlide,change".split(","), function(i, name) {
