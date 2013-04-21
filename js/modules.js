@@ -74,6 +74,12 @@
       });
     });
 
+    _html.click(function() {
+      _self.dispatchEvent('updateIsPlaying', {
+        isPlaying: false
+      });
+    });
+
     function getDate() {
       return lv.tools.getNewDate(dMin, {
         m: _input.val()
@@ -141,10 +147,10 @@
           cats = control.get('categories'),
           conf = control.get('categoriesOrder'),
           p = control.get('closestPosition'),
-          vx = p[5],
-          vy = p[6],
-          v = p[7],
-          r = 1 / p[8] / 100000000,
+          vx = p[3],
+          vy = p[4],
+          v = Math.sqrt(vx * vx + vy * vy),
+          r = 1 / p[5] / 100000000,
           cx = vy / v * r,
           cy = -vx / v * r,
           coef = Math.sqrt(
@@ -153,8 +159,8 @@
           ) / v;
 
       if (_pattern) {
-        _patterndx = ((_patterndx + vx / v) % 400 + 400) % 400;
-        _patterndy = ((_patterndy + vy / v) % 400 + 400) % 400;
+        _patterndx = ((_patterndx + vx / v * 3) % 400 + 400) % 400;
+        _patterndy = ((_patterndy + vy / v * 3) % 400 + 400) % 400;
         
         _ctx.translate(-_patterndx, -_patterndy);
         _ctx.globalAlpha = 0.3;
@@ -218,9 +224,9 @@
           parent,
           index,
           p = control.get('closestPosition'),
-          vx = p[5],
-          vy = p[6],
-          v = p[7],
+          vx = p[3],
+          vy = p[4],
+          v = Math.sqrt(vx * vx + vy * vy),
           coef,
           cats = control.get('categories'),
           order = control.get('categoriesOrder'),
