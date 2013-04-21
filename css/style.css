@@ -205,10 +205,19 @@ body {
   display: none;
 }
 
+#rolodex ul {
+  margin: 0;
+  padding: 0;
+}
+
 #rolodex ul li {
-  margin: 3px 10px 0 0;
+  padding: 3px 10px;
   height: 40px;
   list-style: none;
+}
+
+#rolodex ul li:first-child {
+  box-shadow: 0 0 9px #2A557F;
 }
 
 #rolodex ul li i {
@@ -226,6 +235,16 @@ body {
 
 #rolodex ul li * {
   vertical-align: middle;
+}
+
+#rolodex ul li .abstract-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: calc(100% - 250px);
+  width: -moz-calc(100% - 250px);
+  width: -webkit-calc(100% - 250px);
+  display: inline-block;
 }
 
 #rolodex ul li .abstract-title:hover {

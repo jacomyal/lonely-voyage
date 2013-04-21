@@ -178,7 +178,7 @@
                 break;
             }
 
-            j = i;
+            j = i - 1;
 
             // Normalize the index:
             i = Math.max(i, closestEventsCount);
