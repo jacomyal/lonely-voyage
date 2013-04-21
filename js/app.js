@@ -3,17 +3,18 @@
   window.lv = window.lv || {};
 
   $(document).ready(function() {
-    // domino.settings({
-    //   strict: true,
-    //   verbose: true,
-    //   displayTime: true
-    // });
+    // DEBUG:
+    domino.settings({
+      strict: true,
+      verbose: true,
+      displayTime: true
+    });
 
     var dMin = lv.tools.parseDate('1977-09-01'),
         dMax = new Date();
 
     lv.control = new domino({
-      name: 'the-lonely-voyage',
+      name: 'lv',
       properties: [
         // Context:
         {
@@ -24,11 +25,21 @@
           value: dMin
         },
         {
+          id: 'dateMin',
+          type: 'date',
+          value: dMin
+        },
+        {
+          id: 'dateMax',
+          type: 'date',
+          value: dMax
+        },
+        {
           id: 'speed',
           dispatch: 'speedUpdated',
           triggers: 'updateSpeed',
           type: 'number',
-          value: 0 // Days per frame
+          value: 3 // Days per frame
         },
         {
           id: 'isPlaying',
@@ -40,11 +51,18 @@
 
         // Data:
         {
-          id: 'config',
-          dispatch: 'configUpdated',
-          triggers: 'updateConfig',
+          id: 'categories',
+          dispatch: 'categoriesUpdated',
+          triggers: 'updateCategories',
           type: 'object',
           value: {}
+        },
+        {
+          id: 'categoriesOrder',
+          dispatch: 'categoriesOrderUpdated',
+          triggers: 'updateCategoriesOrder',
+          type: 'array',
+          value: []
         },
         {
           id: 'historicEvents',
@@ -54,18 +72,18 @@
           value: []
         },
         {
-          id: 'nearestEvents',
-          dispatch: 'nearestEventsUpdated',
-          triggers: 'updateNearestEvents',
+          id: 'closestEvents',
+          dispatch: 'closestEventsUpdated',
+          triggers: 'updateClosestEvents',
           type: 'array',
           value: []
         },
         {
-          id: 'contents',
-          dispatch: 'contentsUpdated',
-          triggers: 'updateContents',
-          type: 'object',
-          value: {}
+          id: 'nextEvents',
+          dispatch: 'nextEventsUpdated',
+          triggers: 'updateNextEvents',
+          type: 'array',
+          value: []
         },
         {
           id: 'path',
@@ -75,34 +93,18 @@
           value: []
         },
         {
-          id: 'direction', // angle only
-          dispatch: 'directionUpdated',
-          triggers: 'updateDirection',
-          type: 'number',
-          value: Math.PI
+          id: 'closestPosition',
+          dispatch: 'closestPositionUpdated',
+          triggers: 'updateClosestPosition',
+          type: 'array',
+          value: []
         },
-        {
-          id: 'curvature', // radius only
-          dispatch: 'curvatureUpdated',
-          triggers: 'updateCurvature',
-          type: 'number',
-          value: 10e6
-        },
-
-        // Cache:
         {
           id: 'pathIndex',
           dispatch: 'pathIndexUpdated',
           triggers: 'updatePathIndex',
-          type: 'object',
-          value: {}
-        },
-        {
-          id: 'eventsCursor',
-          dispatch: 'eventsCursorUpdated',
-          triggers: 'updateEventsCursor',
-          type: 'number',
-          value: 0
+          type: 'array',
+          value: []
         }
       ],
       hacks: [
@@ -116,7 +118,7 @@
                 l,
                 path = this.get('path'),
                 currentMonth = 0,
-                pathIndex = {},
+                pathIndex = [],
                 point,
                 nextMonth = 0,
                 nextPointDate,
@@ -134,49 +136,90 @@
               nextMonth = lv.tools.getMonthsDiff(dMin, nextPointDate);
 
               if (currentMonth === nextMonth && !pathIndex[currentMonth])
-                pathIndex[currentMonth] = point;
+                pathIndex[currentMonth] = i;
 
               for (j = currentMonth; j < nextMonth; j++)
                 if (!pathIndex[j])
-                  pathIndex[j] = point;
+                  pathIndex[j] = i;
             }
 
             this.pathIndex = pathIndex;
+
+            // Tweak: Since this hack is triggered just once,
+            // I use it to start the drawing process the first
+            // time:
+            this.date = this.get('date');
           }
         },
         {
           triggers: 'dateUpdated',
           method: function() {
-            this.log('HACK: Compute speed');
+            this.log('HACK: Cache some values');
 
             var i,
                 l,
                 e,
                 events = this.get('historicEvents'),
-                date = lv.tools.numDate(this.get('date')),
-                eventsCount = 10,
-                nearest = [];
+                date = this.get('date'),
+                path = this.get('path'),
+                pathIndex = this.get('pathIndex'),
+                dateTime = date.getTime(),
+                dateNum = lv.tools.numDate(date),
+                m = lv.tools.getMonthsDiff(this.get('dateMin'), date),
+                closestEventsCount = 30,
+                nextEventsCount = 8,
+                closest = [];
 
-            // Find the first event after the date:
+            // Find the closest events to the date:
             for (i = 0, l = events.length; i < l; i++) {
               e = events[i];
 
-              if (e.d > date)
+              if (e.d > dateNum)
                 break;
             }
 
             // Normalize the index:
-            i = Math.max(i, 0);
-            i = Math.min(i, l - eventsCount);
+            i = Math.max(i, closestEventsCount);
+            i = Math.min(i, l - closestEventsCount);
+            this.closestEvents = events.slice(i - closestEventsCount, i + closestEventsCount);
 
-            this.nearestEvents = events.slice(i, i + eventsCount);
+            i = Math.max(i, 0);
+            i = Math.min(i, l - nextEventsCount);
+            this.nextEvents = events.slice(i, i + nextEventsCount);
+
+            // this.speed = Math.floor(Math.min(
+            //   Math.max(
+            //     lv.tools.getDaysDiff(date, lv.tools.parseDate(this.closestEvents[closestEventsCount - 1].d)) / 5,
+            //     1
+            //   ),
+            //   Math.max(
+            //     lv.tools.getDaysDiff(date, lv.tools.parseDate(this.closestEvents[closestEventsCount].d)) / 5,
+            //     1
+            //   )
+            // ));
+
+            // Find the closest position:
+            for (i = pathIndex[m], l = path.length; i < l; i++) {
+              if (path[i][0] > dateTime) {
+                this.closestPosition = path[i];
+                break;
+              }
+            }
           }
         },
         {
           triggers: 'goNextFrame',
           method: function() {
             this.date = lv.tools.getNewDate(this.get('date'), {
-              days: 3
+              days: this.get('speed')
+            });
+          }
+        },
+        {
+          triggers: 'clickArticle',
+          method: function(e) {
+            this.dispatchEvent('openArticle', {
+              id: e.data.id
             });
           }
         }
@@ -198,7 +241,17 @@
         {
           id: 'config',
           url: 'samples/config.json',
-          setter: 'config'
+          success: function(data) {
+            this.categories = data.categories.reduce(function(r, o) {
+              r[o.id] = o;
+              return r;
+            }, {});
+            this.categoriesOrder = data.categories.filter(function(o) {
+              return !o.parent;
+            }).map(function(o) {
+              return o.id;
+            });
+          }
         }
       ]
     });

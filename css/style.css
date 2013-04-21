@@ -128,9 +128,59 @@ body {
   height: 100%;
   width: 100%;
   float: right;
+  overflow: auto;
 }
 
 #article {
+  display: none;
+}
+
+#visualization {
+  position: relative;
+  overflow: hidden;
+}
+
+#voyager {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -37px;
+  margin-top: -18px;
+}
+
+#voyager img {
+  width: 75px;
+}
+
+#captions {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#captions .caption {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 8px #000;
+  border: 1px solid #000;
+  line-height: 30px;
+  text-align: center;
+  background: #fff;
+  cursor: pointer;
+}
+
+#captions .caption:hover {
+  box-shadow: 0 0 12px #000;
+}
+
+#captions .caption i {
+  padding-top: 6px;
+  display: inline-block;
+}
+
+#captions .caption .caption-label {
   display: none;
 }
 
@@ -187,10 +237,6 @@ body {
 #content .btn.close-article:hover {
   background: none;
   color: #d55;
-}
-
-#article {
-  overflow: auto;
 }
 
 #article > * {
